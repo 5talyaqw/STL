@@ -1,6 +1,68 @@
 #include "Store.h"
+#include <iterator>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
+
+Store::Store(std::string storeName, std::string inventoryFileName) : _storeName(storeName)
+{
+	getInventoryFromFile(inventoryFileName);
+}
+std::string Store::getName() const
+{
+	return _storeName;
+}
+
+std::string Store::getSortedProductList(SortingCriteria sortingCritieria) const
+{
+	std::deque<Item> sortedProducts = _products;
+	switch (sortingCritieria)
+	{
+	case CATEGORY:
+		std::sort(sortedProducts.begin(), sortedProducts.end(), CategoryComparator);
+		break;
+	case NAME:
+		std::sort(sortedProducts.begin(), sortedProducts.end(), NameComparator);
+		break;
+	case PRICE:
+		std::sort(sortedProducts.begin(), sortedProducts.end(), PriceComparator);
+		break;
+	case SERIAL:
+		std::sort(sortedProducts.begin(), sortedProducts.end(), SerialComparator);
+		break;
+	default:
+		throw std::invalid_argument("Invalid sorting criteria");
+	}
+	std::ostringstream oss;
+	for (auto it = sortedProducts.begin();it != sortedProducts.end(); it++)
+	{
+		oss << *it << "\n";
+	}
+	return oss.str();
+}
+
+std::string Store::getProductListFilteredByCategory(ItemCategory category) const
+{
+	std::ostringstream oss;
+	for (auto it = _products.begin();it != _products.end(); ++it)
+	{
+		if (it->getCategory() == category)
+		{
+			oss << *it << "\n";
+		}
+	}
+	return oss.str();
+}
+
+Item Store::operator[](const int itemNumber) const
+{
+	if (itemNumber < 0 || itemNumber >= _products.size())
+	{
+		throw std::invalid_argument("index out of bonds");
+
+	}
+	return _products[itemNumber];
+}
 
 void Store::getInventoryFromFile(const std::string inventoryFileName)
 {
@@ -56,4 +118,14 @@ void Store::getInventoryFromFile(const std::string inventoryFileName)
 	//	std::cout << "\n";
 	//}
 
+}
+
+std::ostream& operator<<(std::ostream& os, const Store& store)
+{
+	os << "store name: " << store.getName() << "\n";
+	os<< "Products:\n";
+	
+	std::copy(store._products.begin(), store._products.end(), std::ostream_iterator<Item>(os, "\n"));
+
+	return os;
 }

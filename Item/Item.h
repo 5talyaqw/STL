@@ -32,6 +32,9 @@ public:
     /////////////
     // methods //
     /////////////
+    void increaseCount(int num);
+    void decreaseCount(int num);
+
     double totalPrice() const; //returns _count * _unitPrice
 
     ///////////////
@@ -46,7 +49,6 @@ public:
     /////////////////////////
     // getters and setters //
     /////////////////////////
-
     std::string getName()const;
     std::string getSerial()const;
     int getCount()const;

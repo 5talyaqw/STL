@@ -1,8 +1,10 @@
 #include <iostream>
 #include <windows.h> // WinApi header - needed for setting console color
 #include <random>
+#include <fstream>
+#include <sstream>
 
-#include "Item.h"
+#include "Store.h"
 
 using std::cout;
 using std::endl;
@@ -43,487 +45,213 @@ std::string getItemString(const Item& item)
         ", Amount: " + std::to_string(item.getCount()) + "]";
 }
 
-bool test1Item()
+std::string readFileToString(const std::string fileName)
+{
+    std::ifstream inFile;
+    inFile.open(fileName); //open the input file
+
+    std::stringstream strStream;
+    strStream << inFile.rdbuf(); //read the file
+    std::string str = strStream.str(); //str holds the content of the file
+
+    return str;
+}
+
+bool test2Store()
 {
     bool result = false;
 
     try
     {
-        // Tests Ex10 part 1 - Item
+        // Tests Ex10 part 2 - Store
 
-        set_console_color(TEAL);
+        set_console_color(PURPLE);
         cout <<
             "*******************\n" <<
-            "Test 1 - Item				\n" <<
+            "Test 2 - Store				\n" <<
             "*******************\n" << endl;
 
         set_console_color(WHITE);
 
-        cout <<
-            "Initializing Item1: ... \n" << endl;
 
-        Item item1("White Sliced Bread 750g", "BFTRZ", 5.12, FOOD);
-        std::string expected = "[Serial: BFTRZ, Name: White Sliced Bread 750g, Category: Food, Price: 5.120000, Amount: 1]";
-        std::string got = getItemString(item1);
-        cout << "Expected: " << expected << endl;
-        cout << "Got     : " << got << std::endl;
+        ///////////////////////////
+        // Checking Sort Methods //
+        ///////////////////////////
+        cout <<
+            "Initializing Store1(\"MagshIKEA\", \"InventoryIKEA.csv\"): ... \n" << endl;
+        Store s1("IKEA", "C:\\Users\\Cyber_User\\Desktop\\EkronotExercises\\STL\\InventoryIKEA.csv");
+
+        cout <<
+            "\nSorting store items by Name: ... \n" << endl;
+
+        std::string expected = readFileToString("output1a.txt");
+        std::string got = s1.getSortedProductList(NAME);
+        cout << "Expected:\n" << expected << endl;
+        cout << "Got     :\n" << got << std::endl;
         if (got != expected)
         {
             set_console_color(RED);
-            std::cout << "FAILED: Item information is not as expected\n" <<
-                "check Item Constructor and functions Item::getSerial(), Item::getName(), \n" <<
-                "Item::getCategory(), Item::getPrice(), Item::getCount\n";
+            std::cout << "FAILED: Store information is not as expected\n" <<
+                "check Store Constructor and functions Store::getSortedProductList(SortingCriteria) \n";
             return false;
             set_console_color(WHITE);
         }
 
         cout <<
-            "\nInitializing Item2: ... \n" << endl;
+            "\nSorting store items by Price: ... \n" << endl;
 
-        Item item2("Table Salt 1kg", "vT0LC", 2.07, FOOD);
-        expected = "[Serial: vT0LC, Name: Table Salt 1kg, Category: Food, Price: 2.070000, Amount: 1]";
-        got = getItemString(item2);
-        cout << "Expected: " << expected << endl;
-        cout << "Got     : " << got << std::endl;
+        expected = readFileToString("output1b.txt");
+        got = s1.getSortedProductList(PRICE);
+        cout << "Expected:\n" << expected << endl;
+        cout << "Got     :\n" << got << std::endl;
         if (got != expected)
         {
             set_console_color(RED);
-            std::cout << "FAILED: Item information is not as expected\n" <<
-                "check Item Constructor and functions Item::getSerial(), Item::getName(), \n" <<
-                "Item::getCategory(), Item::getPrice(), Item::getCount\n";
+            std::cout << "FAILED: Store information is not as expected\n" <<
+                "check Store Constructor and functions Store::getSortedProductList(SortingCriteria) \n";
             return false;
             set_console_color(WHITE);
         }
 
         cout <<
-            "\nInitializing Item3: ... \n" << endl;
+            "\nSorting store items by Serial Number: ... \n" << endl;
 
-        Item item3("Milk 3% 1 liter", "USlOG", 5.17, FOOD);
-        expected = "[Serial: USlOG, Name: Milk 3% 1 liter, Category: Food, Price: 5.170000, Amount: 1]";
-        got = getItemString(item3);
-        cout << "Expected: " << expected << endl;
-        cout << "Got     : " << got << std::endl;
+        expected = readFileToString("output1c.txt");
+        got = s1.getSortedProductList(SERIAL);
+        cout << "Expected:\n" << expected << endl;
+        cout << "Got     :\n" << got << std::endl;
         if (got != expected)
         {
             set_console_color(RED);
-            std::cout << "FAILED: Item information is not as expected\n" <<
-                "check Item Constructor and functions Item::getSerial(), Item::getName(), \n" <<
-                "Item::getCategory(), Item::getPrice(), Item::getCount\n";
+            std::cout << "FAILED: Store information is not as expected\n" <<
+                "check Store Constructor and functions Store::getSortedProductList(SortingCriteria) \n";
             return false;
             set_console_color(WHITE);
         }
 
         cout <<
-            "\nInitializing Item4: ... \n" << endl;
+            "Initializing Store2(\"Shefa Isaschar\", \"InventorySuperMarket.csv\"): ... \n" << endl;
+        Store s2("Shefa Isaschar", "C:\\Users\\Cyber_User\\Desktop\\EkronotExercises\\STL\\InventorySuperMarket.csv");
 
-        Item item4("Office Desk IKEA", "pj77k", 1050.0, HOME);
-        expected = "[Serial: pj77k, Name: Office Desk IKEA, Category: Home, Price: 1050.000000, Amount: 1]";
-        got = getItemString(item4);
-        cout << "Expected: " << expected << endl;
-        cout << "Got     : " << got << std::endl;
+        cout <<
+            "\nSorting store items by Name: ... \n" << endl;
+
+        expected = readFileToString("output2a.txt");
+        got = s2.getSortedProductList(NAME);
+        cout << "Expected:\n" << expected << endl;
+        cout << "Got     :\n" << got << std::endl;
         if (got != expected)
         {
             set_console_color(RED);
-            std::cout << "FAILED: Item information is not as expected\n" <<
-                "check Item Constructor and functions Item::getSerial(), Item::getName(), \n" <<
-                "Item::getCategory(), Item::getPrice(), Item::getCount\n";
+            std::cout << "FAILED: Store information is not as expected\n" <<
+                "check Store Constructor and functions Store::getSortedProductList(SortingCriteria) \n";
             return false;
             set_console_color(WHITE);
         }
 
         cout <<
-            "\nInitializing Item5: ... \n" << endl;
+            "\nSorting store items by Category: ... \n" << endl;
 
-        Item item5("Leather Sofa Brown 3 Seats IKEA", "LBbGn", 1099.0, HOME);
-        expected = "[Serial: LBbGn, Name: Leather Sofa Brown 3 Seats IKEA, Category: Home, Price: 1099.000000, Amount: 1]";
-        got = getItemString(item5);
-        cout << "Expected: " << expected << endl;
-        cout << "Got     : " << got << std::endl;
+        expected = readFileToString("output2b.txt");
+        got = s2.getSortedProductList(CATEGORY);
+        cout << "Expected:\n" << expected << endl;
+        cout << "Got     :\n" << got << std::endl;
         if (got != expected)
         {
             set_console_color(RED);
-            std::cout << "FAILED: Item information is not as expected\n" <<
-                "check Item Constructor and functions Item::getSerial(), Item::getName(), \n" <<
-                "Item::getCategory(), Item::getPrice(), Item::getCount\n";
+            std::cout << "FAILED: Store information is not as expected\n" <<
+                "check Store Constructor and functions Store::getSortedProductList(SortingCriteria) \n";
             return false;
             set_console_color(WHITE);
         }
 
         cout <<
-            "\nInitializing Item6: ... \n" << endl;
+            "Initializing Store3(\"MagshiPharm\", \"InventoryPharm.csv\"): ... \n" << endl;
+        Store s3("MagshiPharm", "C:\\Users\\Cyber_User\\Desktop\\EkronotExercises\\STL\\InventoryPharm.csv");
 
-        Item item6("Mouth Wash 500ml", "8sZ4N", 36.9, PHARM);
-        expected = "[Serial: 8sZ4N, Name: Mouth Wash 500ml, Category: Pharm, Price: 36.900000, Amount: 1]";
-        got = getItemString(item6);
-        cout << "Expected: " << expected << endl;
-        cout << "Got     : " << got << std::endl;
+        cout <<
+            "\nSorting store items by Name: ... \n" << endl;
+
+        expected = readFileToString("output3a.txt");
+        got = s3.getSortedProductList(NAME);
+        cout << "Expected:\n" << expected << endl;
+        cout << "Got     :\n" << got << std::endl;
         if (got != expected)
         {
             set_console_color(RED);
-            std::cout << "FAILED: Item information is not as expected\n" <<
-                "check Item Constructor and functions Item::getSerial(), Item::getName(), \n" <<
-                "Item::getCategory(), Item::getPrice(), Item::getCount\n";
+            std::cout << "FAILED: Store information is not as expected\n" <<
+                "check Store Constructor and functions Store::getSortedProductList(SortingCriteria) \n";
             return false;
             set_console_color(WHITE);
         }
 
         cout <<
-            "\nInitializing Item7: ... \n" << endl;
+            "\nSorting store items by Category: ... \n" << endl;
 
-        Item item7("Shampoo 750ml", "G9vKR", 10.9, PHARM);
-        expected = "[Serial: G9vKR, Name: Shampoo 750ml, Category: Pharm, Price: 10.900000, Amount: 1]";
-        got = getItemString(item7);
-        cout << "Expected: " << expected << endl;
-        cout << "Got     : " << got << std::endl;
+        expected = readFileToString("output3b.txt");
+        got = s3.getSortedProductList(CATEGORY);
+        cout << "Expected:\n" << expected << endl;
+        cout << "Got     :\n" << got << std::endl;
         if (got != expected)
         {
             set_console_color(RED);
-            std::cout << "FAILED: Item information is not as expected\n" <<
-                "check Item Constructor and functions Item::getSerial(), Item::getName(), \n" <<
-                "Item::getCategory(), Item::getPrice(), Item::getCount\n";
-            return false;
-            set_console_color(WHITE);
-        }
-
-        cout <<
-            "\nInitializing Item8: ... \n" << endl;
-
-        Item item8("Bleach 2 liter", "boPnl", 12.5, CLEANING);
-        expected = "[Serial: boPnl, Name: Bleach 2 liter, Category: Cleaning, Price: 12.500000, Amount: 1]";
-        got = getItemString(item8);
-        cout << "Expected: " << expected << endl;
-        cout << "Got     : " << got << std::endl;
-        if (got != expected)
-        {
-            set_console_color(RED);
-            std::cout << "FAILED: Item information is not as expected\n" <<
-                "check Item Constructor and functions Item::getSerial(), Item::getName(), \n" <<
-                "Item::getCategory(), Item::getPrice(), Item::getCount\n";
+            std::cout << "FAILED: Store information is not as expected\n" <<
+                "check Store Constructor and functions Store::getSortedProductList(SortingCriteria) \n";
             return false;
             set_console_color(WHITE);
         }
 
         //////////////////////////////
-        // Checking Price and Count //
+        // Checking Filter Methods  //
         //////////////////////////////
 
         cout <<
-            "\nSetting Item1 Counter to 5: ... \n" << endl;
-        item1.setCount(5);
+            "\nFiltering store items by Category = FOOD: ... \n" << endl;
 
-        expected = "[Serial: BFTRZ, Name: White Sliced Bread 750g, Category: Food, Price: 5.120000, Amount: 5]";
-        got = getItemString(item1);
-        cout << "Expected: " << expected << endl;
-        cout << "Got     : " << got << std::endl;
+        expected = readFileToString("output3c.txt");
+        got = s3.getProductListFilteredByCategory(FOOD);
+        cout << "Expected:\n" << expected << endl;
+        cout << "Got     :\n" << got << std::endl;
         if (got != expected)
         {
             set_console_color(RED);
-            std::cout << "FAILED: Item information is not as expected\n" <<
-                "check functions Item::setCount(int) Item::getSerial(), Item::getName(), \n" <<
-                "Item::getCategory(), Item::getPrice(), Item::getCount\n";
+            std::cout << "FAILED: Store information is not as expected\n" <<
+                "check function Store::getProductListFilteredByCategory(ItemCategory) \n";
             return false;
             set_console_color(WHITE);
         }
 
         cout <<
-            "\nCalculating item1 total price: ... \n" << endl;
-        item1.setCount(5);
+            "\nFiltering store items by Category = CLEANING: ... \n" << endl;
 
-        expected = "25.600000";
-        got = std::to_string(item1.totalPrice());
-        cout << "Expected: " << expected << endl;
-        cout << "Got     : " << got << std::endl;
+        expected = readFileToString("output3d.txt");
+        got = s3.getProductListFilteredByCategory(CLEANING);
+        cout << "Expected:\n" << expected << endl;
+        cout << "Got     :\n" << got << std::endl;
         if (got != expected)
         {
             set_console_color(RED);
-            std::cout << "FAILED: Item information is not as expected\n" <<
-                "check functions Item::totalPrice() \n";
+            std::cout << "FAILED: Store information is not as expected\n" <<
+                "check function Store::getProductListFilteredByCategory(ItemCategory) \n";
             return false;
             set_console_color(WHITE);
         }
 
         cout <<
-            "\nSetting Item7 Counter to 34 and Calculating item7 total price: ... \n" << endl;
-        item7.setCount(34);
+            "\nFiltering store items by Category = PHARM: ... \n" << endl;
 
-        expected = "370.600000";
-        got = std::to_string(item7.totalPrice());
-        cout << "Expected: " << expected << endl;
-        cout << "Got     : " << got << std::endl;
+        expected = readFileToString("output3e.txt");
+        got = s3.getProductListFilteredByCategory(PHARM);
+        cout << "Expected:\n" << expected << endl;
+        cout << "Got     :\n" << got << std::endl;
         if (got != expected)
         {
             set_console_color(RED);
-            std::cout << "FAILED: Item information is not as expected\n" <<
-                "check functions Item::setCount(int), Item::totalPrice() \n";
+            std::cout << "FAILED: Store information is not as expected\n" <<
+                "check function Store::getProductListFilteredByCategory(ItemCategory) \n";
             return false;
             set_console_color(WHITE);
         }
-
-        ////////////////////////////
-        // Checking Bad Arguments //
-        ////////////////////////////
-
-        try
-        {
-            cout <<
-                "\nTrying to initialize a bad item: ..." << endl;
-            cout << "[Serial: y3hMm, Name: Eye Contacts liquid 350ml, Category: Pharm, Price: -49.900000, Amount: 1]\n";
-            cout <<
-                "Price is negative - Expecting std::invalid_argument... \n" << endl;
-
-            Item badItem1("Eye Contacts liquid 350ml", "y3hMm", -49.9, PHARM);
-
-            set_console_color(RED);
-            std::cout << "Should have thrown an std::invalid_argument" << std::endl;
-            set_console_color(WHITE);
-            return false;
-        }
-        catch (const std::invalid_argument& e)
-        {
-            cout << "Got std::invalid_argument " << std::endl;
-            set_console_color(GREEN);
-            cout << "OK" << std::endl;
-            set_console_color(WHITE);
-        }
-        catch (const std::exception& e)
-        {
-            set_console_color(YELLOW);
-            cout << "Got <" << typeid(e).name() << ">" << std::endl;
-            cout << "WARNING: got an exception, should be std::invalid_argument\n";
-            set_console_color(WHITE);
-        }
-        catch (...)
-        {
-            set_console_color(RED);
-            cout << "Object thrown" << std::endl;
-            cout << "FAILED: catched an object, should be either std::invalid_argument or exception\n";
-            set_console_color(WHITE);
-            return false;
-        }
-
-        try
-        {
-            cout <<
-                "\nTrying to initialize a bad item: ..." << endl;
-            cout << "[Serial: abcdefg, Name: Dishwash Soap 515ml, Category: Cleaning, Price: 13.9, Amount: 1]\n";
-            cout <<
-                "\nSerial is not 5 characters - Expecting std::invalid_argument... \n" << endl;
-
-            Item badItem2("Dishwash Soap 515ml", "abcdefg", 13.9, CLEANING);
-
-            set_console_color(RED);
-            std::cout << "Should have thrown an std::invalid_argument" << std::endl;
-            set_console_color(WHITE);
-            return false;
-        }
-        catch (const std::invalid_argument& e)
-        {
-            cout << "Got std::invalid_argument" << std::endl;
-            set_console_color(GREEN);
-            cout << "OK" << std::endl;
-            set_console_color(WHITE);
-        }
-        catch (const std::exception& e)
-        {
-            set_console_color(YELLOW);
-            cout << "Got <" << typeid(e).name() << ">" << std::endl;
-            cout << "WARNING: got an exception, should be std::InvalidArgument\n";
-            set_console_color(WHITE);
-        }
-        catch (...)
-        {
-            set_console_color(RED);
-            cout << "Object thrown" << std::endl;
-            cout << "FAILED: catched an object, should be either std::InvalidArgument or exception\n";
-            set_console_color(WHITE);
-            return false;
-        }
-
-        try
-        {
-            cout <<
-                "\nTrying to set a bad parameter to item4: ..." << endl;
-            cout << "item4.setCount(0)\n";
-            cout <<
-                "\nItem's count must be positive - Expecting std::invalid_argument... \n" << endl;
-
-            item4.setCount(-1);
-
-            set_console_color(RED);
-            std::cout << "Should have thrown an std::invalid_argument" << std::endl;
-            set_console_color(WHITE);
-            return false;
-        }
-        catch (const std::invalid_argument& e)
-        {
-            cout << "Got std::invalid_argument" << std::endl;
-            set_console_color(GREEN);
-            cout << "OK" << std::endl;
-            set_console_color(WHITE);
-        }
-        catch (const std::exception& e)
-        {
-            set_console_color(YELLOW);
-            cout << "Got <" << typeid(e).name() << ">" << std::endl;
-            cout << "WARNING: got an exception, should be std::InvalidArgument\n";
-            set_console_color(WHITE);
-        }
-        catch (...)
-        {
-            set_console_color(RED);
-            cout << "Object thrown" << std::endl;
-            cout << "FAILED: catched an object, should be either std::InvalidArgument or exception\n";
-            set_console_color(WHITE);
-            return false;
-        }
-
-        try
-        {
-            cout <<
-                "\nTrying to set a bad parameter to item6: ..." << endl;
-            cout << "item6.setCount(-10)\n";
-            cout <<
-                "\nItem's count must be positive - Expecting std::invalid_argument... \n" << endl;
-
-            item6.setCount(-10);
-
-            set_console_color(RED);
-            std::cout << "Should have thrown an std::invalid_argument" << std::endl;
-            set_console_color(WHITE);
-            return false;
-        }
-        catch (const std::invalid_argument& e)
-        {
-            cout << "Got std::invalid_argument" << std::endl;
-            set_console_color(GREEN);
-            cout << "OK" << std::endl;
-            set_console_color(WHITE);
-        }
-        catch (const std::exception& e)
-        {
-            set_console_color(YELLOW);
-            cout << "Got <" << typeid(e).name() << ">" << std::endl;
-            cout << "WARNING: got an exception, should be std::InvalidArgument\n";
-            set_console_color(WHITE);
-        }
-        catch (...)
-        {
-            set_console_color(RED);
-            cout << "Object thrown" << std::endl;
-            cout << "FAILED: catched an object, should be either std::InvalidArgument or exception\n";
-            set_console_color(WHITE);
-            return false;
-        }
-
-        ///////////////////////////////
-        // Checking Operators <,>,== //
-        ///////////////////////////////
-
-        cout <<
-            "\nComparing items: ... \n" << endl;
-
-        bool result = item1 < item2;
-        cout <<
-            "item1 < item2: expected: true got: " << (result ? "true" : "false") << " -->";
-        if (result == true)
-        {
-            set_console_color(GREEN);
-            cout << " OK" << std::endl;
-            set_console_color(WHITE);
-        }
-        else
-        {
-            set_console_color(YELLOW);
-            cout << " NOT OK" << std::endl;
-            set_console_color(WHITE);
-            return 1;
-        }
-
-        result = item5 > item7;
-        cout <<
-            "item5 > item7: expected: true got: " << (result ? "true" : "false") << " -->";
-        if (result == true)
-        {
-            set_console_color(GREEN);
-            cout << " OK" << std::endl;
-            set_console_color(WHITE);
-        }
-        else
-        {
-            set_console_color(YELLOW);
-            cout << " NOT OK" << std::endl;
-            set_console_color(WHITE);
-            return 1;
-        }
-
-        result = item1 == item2;
-        cout <<
-            "item1 == item2: expected: false got: " << (result ? "true" : "false") << " -->";
-        if (result == false)
-        {
-            set_console_color(GREEN);
-            cout << " OK" << std::endl;
-            set_console_color(WHITE);
-        }
-        else
-        {
-            set_console_color(YELLOW);
-            cout << " NOT OK" << std::endl;
-            set_console_color(WHITE);
-            return 1;
-        }
-
-        result = item8 < item7;
-        cout <<
-            "item8 < item7: expected: false got: " << (result ? "true" : "false") << " -->";
-        if (result == false)
-        {
-            set_console_color(GREEN);
-            cout << " OK" << std::endl;
-            set_console_color(WHITE);
-        }
-        else
-        {
-            set_console_color(YELLOW);
-            cout << " NOT OK" << std::endl;
-            set_console_color(WHITE);
-            return 1;
-        }
-
-        result = item5 > item2;
-        cout <<
-            "item5 < item2: expected: false got: " << (result ? "true" : "false") << " -->";
-        if (result == false)
-        {
-            set_console_color(GREEN);
-            cout << " OK" << std::endl;
-            set_console_color(WHITE);
-        }
-        else
-        {
-            set_console_color(YELLOW);
-            cout << " NOT OK" << std::endl;
-            set_console_color(WHITE);
-            return 1;
-        }
-
-        result = item3 > item8;
-        cout <<
-            "item3 > item8: expected: false got: " << (result ? "true" : "false") << " -->";
-        if (result == false)
-        {
-            set_console_color(GREEN);
-            cout << " OK" << std::endl;
-            set_console_color(WHITE);
-        }
-        else
-        {
-            set_console_color(YELLOW);
-            cout << " NOT OK" << std::endl;
-            set_console_color(WHITE);
-            return 1;
-        }
-
     }
     catch (...)
     {
@@ -536,7 +264,7 @@ bool test1Item()
     }
 
     set_console_color(LIGHT_GREEN);
-    std::cout << "\n########## Item - TEST Passed!!! ##########\n\n";
+    std::cout << "\n########## Store - TEST Passed!!! ##########\n\n";
     set_console_color(WHITE);
 
     return true;
@@ -549,16 +277,16 @@ int main()
     std::cout <<
         "###########################\n" <<
         "Exercise 10 - Magshistore\n" <<
-        "Part 1 - Item\n" <<
+        "Part 2 - Store\n" <<
         "###########################\n" << std::endl;
     set_console_color(WHITE);
 
-    bool testResult = test1Item();
+    bool testResult = test2Store();
 
     if (testResult)
     {
         set_console_color(GREEN);
-        std::cout << "\n########## Ex10 Part1 Tests Passed!!! ##########" << "\n\n";
+        std::cout << "\n########## Ex10 Part2 Tests Passed!!! ##########" << "\n\n";
         set_console_color(WHITE);
     }
     else

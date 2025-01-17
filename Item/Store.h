@@ -32,6 +32,12 @@ struct {
 	}
 } PriceComparator;
 
+struct {
+	bool operator()(const Item& a, const Item& b)
+	{
+		return a.getSerial() < b.getSerial();
+	}
+} SerialComparator;
 
 enum SortingCriteria { CATEGORY = 0, NAME = 1, PRICE = 2, SERIAL = 3 };
 
@@ -56,12 +62,6 @@ public:
 	std::string getName()const;
 	std::string getSortedProductList(SortingCriteria sortingCritieria)const;
 	std::string getProductListFilteredByCategory(ItemCategory category)const;
-
-	/////////////
-	// methods //
-	/////////////
-
-	/* Complete by yourself */
 
 	///////////////
 	// operators //
