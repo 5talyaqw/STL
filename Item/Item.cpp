@@ -15,16 +15,6 @@ Item::Item(std::string name, std::string serialNumber, double unitPrice, ItemCat
 	}
 }
 
-void Item::increaseCount(int num)
-{
-	_count += num;
-}
-
-void Item::decreaseCount(int num)
-{
-	_count -= num;
-}
-
 double Item::totalPrice() const
 {
 	return _count * _unitPrice;

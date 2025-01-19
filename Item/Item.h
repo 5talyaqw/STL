@@ -32,8 +32,6 @@ public:
     /////////////
     // methods //
     /////////////
-    void increaseCount(int num);
-    void decreaseCount(int num);
 
     double totalPrice() const; //returns _count * _unitPrice
 
