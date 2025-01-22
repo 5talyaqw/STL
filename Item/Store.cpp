@@ -3,23 +3,37 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
+#include <iomanip>
+#include <vector>
 
+//constructor
 Store::Store(std::string storeName, std::string inventoryFileName) : _storeName(storeName)
 {
 	getInventoryFromFile(inventoryFileName);
 }
+
+//getting the name
 std::string Store::getName() const
 {
 	return _storeName;
 }
 
+
 std::string Store::getSortedProductList(SortingCriteria sortingCritieria) const
 {
 	std::deque<Item> sortedProducts = _products;
+	
 	switch (sortingCritieria)
 	{
 	case CATEGORY:
-		std::sort(sortedProducts.begin(), sortedProducts.end(), CategoryComparator);
+		std::sort(sortedProducts.begin(), sortedProducts.end(), [](const Item& a, const Item& b) 
+			{
+			// first comparing by the category and then by the name
+			if (a.getCategory() != b.getCategory()) {
+				return a.getCategory() < b.getCategory();
+			}
+			return a.getName() < b.getName();
+			});
 		break;
 	case NAME:
 		std::sort(sortedProducts.begin(), sortedProducts.end(), NameComparator);
@@ -33,26 +47,53 @@ std::string Store::getSortedProductList(SortingCriteria sortingCritieria) const
 	default:
 		throw std::invalid_argument("Invalid sorting criteria");
 	}
-	std::ostringstream oss;
-	for (auto it = sortedProducts.begin();it != sortedProducts.end(); it++)
+
+	//storing the sorted items as string 
+	std::string sortP;	
+	for (auto it = sortedProducts.begin(); it < sortedProducts.end(); ++it)
 	{
-		oss << *it << "\n";
+		sortP += "[Serial: " + it->getSerial() +
+			", Name: " + it->getName() +
+			", Category: " + getItemCategoryString(it->getCategory()) +
+			", Price: " + std::to_string(it->getPrice()) +
+			", Amount: " + std::to_string(it->getCount()) + "]\n";
 	}
-	return oss.str();
+
+	return sortP;
 }
 
 std::string Store::getProductListFilteredByCategory(ItemCategory category) const
 {
-	std::ostringstream oss;
-	for (auto it = _products.begin();it != _products.end(); ++it)
+	//vector to stoarge the filtered products
+	std::vector<Item> filteredProducts;
+
+	for (auto it = _products.begin(); it < _products.end(); ++it)
 	{
 		if (it->getCategory() == category)
 		{
-			oss << *it << "\n";
+			filteredProducts.push_back(*it);
 		}
 	}
-	return oss.str();
+
+	//sorting it like i did on the function b4 it
+	std::sort(filteredProducts.begin(), filteredProducts.end(), [](const Item& a, const Item& b)
+		{
+			return a.getName() < b.getName(); // Sorting by name
+		});
+
+	std::ostringstream filteredProduct;
+	for (auto it = filteredProducts.begin(); it < filteredProducts.end(); ++it)
+	{
+		filteredProduct << "[Serial: " << it->getSerial()
+			<< ", Name: " << it->getName()
+			<< ", Category: " << getItemCategoryString(it->getCategory())
+			<< ", Price: " << std::fixed << std::setprecision(6) << it->getPrice()
+			<< ", Amount: " << it->getCount() << "]\n";
+	}
+
+	return filteredProduct.str();
 }
+
 
 Item Store::operator[](const int itemNumber) const
 {
@@ -125,7 +166,12 @@ std::ostream& operator<<(std::ostream& os, const Store& store)
 	os << "store name: " << store.getName() << "\n";
 	os<< "Products:\n";
 	
-	std::copy(store._products.begin(), store._products.end(), std::ostream_iterator<Item>(os, "\n"));
+	//printing the items according to the format
+	for (int i = 0; i < store._products.size(); i++)
+	{
+		const Item& item = store._products[i];
+		os << "[" << i << "] - " << "[" << item.getSerial()<< ", " << item.getName() << ", " << item.getCategory() << ", " << item.getPrice() << ", " << item.getCount() << "]" << "\n";
+	};
 
 	return os;
 }

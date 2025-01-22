@@ -17,7 +17,7 @@ public:
 	void createNewShoppingCart(std::string shoppingCartName);
 
 	double shoppingCartSum(std::string shoppingCartName); // returns the payment sum for a given shopping cart;
-	double totalSum();//returns the total sum for payment
+	double totalSum()const;//returns the total sum for payment
 
 	void addItem(const Item& item, std::string shoppingCartName);//add item to the set
 	void removeItem(const Item& item, std::string shoppingCartName);//remove item from the set

@@ -37,7 +37,7 @@ double Customer::shoppingCartSum(std::string shoppingCartName)
 }
 
 //calculating the total of all shopping carts
-double Customer::totalSum()
+double Customer::totalSum() const
 {
 	double total = 0.0;
 	for (auto it = _shoppingCarts.begin(); it != _shoppingCarts.end(); ++it)
